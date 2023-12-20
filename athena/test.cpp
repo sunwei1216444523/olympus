@@ -1,5 +1,5 @@
 #include <iostream>
-#include "hdmap_proto_pb.h"
+#include "external/baidu_apollo/modules/map/proto/map.pb.h"
 
 int main() {
     std::cout << "hello" << std::endl;

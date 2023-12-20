@@ -1,13 +1,19 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 """首先解决Apollo需要依赖的库"""
-"""然后调用Apollo自己的deps"""
-"""最后调用apollo"""
+http_archive(
+    name = "com_github_grpc_grpc",
+    sha256 = "419dba362eaf8f1d36849ceee17c3e2ff8ff12ac666b42d3ff02a164ebe090e9",
+    strip_prefix = "grpc-1.30.0",
+    urls = [
+        "https://apollo-system.cdn.bcebos.com/archive/6.0/v1.30.0.tar.gz",
+        "https://github.com/grpc/grpc/archive/v1.30.0.tar.gz",
+    ],
+)
 
-load("//tools:workspace.bzl", "include_third_repos")
-include_third_repos()
-load("@baidu_apollo//tools:workspace.bzl", "apollo_repositories")
-apollo_repositories()
+load("@com_github_grpc_grpc//bazel:grpc_deps.bzl", "grpc_deps")
+grpc_deps()
+
 
 http_archive(
     name = "com_google_protobuf",
@@ -31,6 +37,12 @@ http_archive(
 load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
 rules_proto_dependencies()
 rules_proto_toolchains()
+"""然后调用Apollo自己的deps"""
+load("//tools:workspace.bzl", "include_third_repos")
+include_third_repos()
+load("@baidu_apollo//tools:workspace.bzl", "basic_repositories")
+basic_repositories()
+"""最后才能使用apollo"""
 
 # http_archive(
 #     name = "rules_cc",
